@@ -1,12 +1,24 @@
-ignore env file
-.env
-
-# ignore variables
-*.tfvars
-
-# ignore state files
+# Terraform
+.terraform/
 *.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Terraform plans
 *.tfplan
+
+# Local overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Crash logs
+crash.log
+
+# Environment files
+.env
+.env.*
 
 # ignore bootstrap
 bootstrap/
