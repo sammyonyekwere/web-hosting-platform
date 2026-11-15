@@ -1,0 +1,5 @@
+# ignore variables
+*.tfvars
+
+# ignore state files
+*.tfstate
