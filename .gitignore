@@ -7,3 +7,6 @@ ignore env file
 # ignore state files
 *.tfstate
 *.tfplan
+
+# ignore bootstrap
+bootstrap/
