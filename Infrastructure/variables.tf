@@ -17,3 +17,12 @@ variable "environment" {
   type    = string
   default = "staging"
 }
+
+variable "administrator_login" {
+  type = string
+}
+
+variable "administrator_password" {
+  type      = string
+  sensitive = true
+}
