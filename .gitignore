@@ -1,5 +1,9 @@
+ignore env file
+.env
+
 # ignore variables
 *.tfvars
 
 # ignore state files
 *.tfstate
+*.tfplan
