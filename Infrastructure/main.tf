@@ -22,3 +22,9 @@ module "database" {
 
   depends_on = [module.network]
 }
+
+module "storage" {
+  source              = "./modules/storage"
+  resource_group_name = azurerm_resource_group.web.name
+  location            = azurerm_resource_group.web.location
+}
