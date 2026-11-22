@@ -15,7 +15,7 @@ jobs:
     defaults:
       run:
         working-directory: ./Infrastructure
-        
+
     steps:
       - uses: actions/checkout@v7
 
@@ -35,10 +35,10 @@ jobs:
         shell: bash
         env:
           ARM_USE_AZUREAD: "true"
-          TF_BACKEND_RESOURCE_GROUP: ${{ vars.AZURE_TFSTATE_RESOURCE_GROUP }}
-          TF_BACKEND_STORAGE_ACCOUNT: ${{ vars.AZURE_TFSTATE_STORAGE_ACCOUNT }}
-          TF_BACKEND_CONTAINER: ${{ vars.AZURE_TFSTATE_CONTAINER }}
-          TF_BACKEND_KEY: ${{ vars.AZURE_TFSTATE_KEY }}
+          TF_BACKEND_RESOURCE_GROUP: ${{ vars.TF_BACKEND_RESOURCE_GROUP }}
+          TF_BACKEND_STORAGE_ACCOUNT: ${{ vars.TFSTATE_STORAGE_ACCOUNT_NAME }}
+          TF_BACKEND_CONTAINER: ${{ vars.TFSTATE_CONTAINER_NAME }}
+          TF_BACKEND_KEY: ${{ vars.TFSTATE_KEY }}
         run: |
           terraform init \
             -backend-config="resource_group_name=$TF_BACKEND_RESOURCE_GROUP" \
