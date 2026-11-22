@@ -1,0 +1,50 @@
+name: Terraform Plan
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch: 
+jobs:
+  terraform-plan:
+    environment: terraform-plan
+    permissions:
+      contents: read
+      packages: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16"
+
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        shell: bash
+        env:
+          ARM_USE_AZUREAD: "true"
+          TF_BACKEND_RESOURCE_GROUP: ${{ vars.AZURE_TFSTATE_RESOURCE_GROUP }}
+          TF_BACKEND_STORAGE_ACCOUNT: ${{ vars.AZURE_TFSTATE_STORAGE_ACCOUNT }}
+          TF_BACKEND_CONTAINER: ${{ vars.AZURE_TFSTATE_CONTAINER }}
+          TF_BACKEND_KEY: ${{ vars.AZURE_TFSTATE_KEY }}
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=$TF_BACKEND_RESOURCE_GROUP" \
+            -backend-config="storage_account_name=$TF_BACKEND_STORAGE_ACCOUNT" \
+            -backend-config="container_name=$TF_BACKEND_CONTAINER" \
+            -backend-config="key=$TF_BACKEND_KEY" 
+
+      - name: Terraform Plan
+        shell: bash
+        env:
+          ARM_USE_AZUREAD: "true"
+        run: |
+          terraform plan -out=tfplan
