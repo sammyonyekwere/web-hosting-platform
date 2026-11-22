@@ -2,6 +2,8 @@ locals {
   uploads_directory = "/mounts/uploads"
 }
 
+
+
 resource "azurerm_service_plan" "app" {
   name                = "web-service-plan"
   resource_group_name = var.resource_group_name
@@ -28,7 +30,7 @@ resource "azurerm_linux_web_app" "app" {
   site_config {
     always_on = true
     application_stack {
-      php_version = "8.0"
+      php_version = "8.3"
     }
   }
 

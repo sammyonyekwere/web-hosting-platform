@@ -1,3 +1,7 @@
+resource "random_integer" "rand" {
+  min = 10000
+  max = 99999
+}
 
 resource "azurerm_resource_group" "web" {
   name     = var.resource_group_name
@@ -28,11 +32,13 @@ module "storage" {
   source              = "./modules/storage"
   resource_group_name = azurerm_resource_group.web.name
   location            = azurerm_resource_group.web.location
+
+
 }
 
 module "hosting" {
   source               = "./modules/hosting"
-  app_name             = var.app_name
+  app_name             = "${var.app_name}${random_integer.rand.result}"
   app_email            = var.app_email
   resource_group_name  = azurerm_resource_group.web.name
   location             = azurerm_resource_group.web.location
@@ -42,5 +48,4 @@ module "hosting" {
   storage_account_name = module.storage.storage_account_name
   storage_share_name   = module.storage.storage_file_share_name
 
-  depends_on = [module.storage, module.database]
 }
