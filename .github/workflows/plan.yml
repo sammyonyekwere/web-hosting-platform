@@ -6,7 +6,6 @@ on:
   workflow_dispatch: 
 jobs:
   terraform-plan:
-    environment: terraform-plan
     permissions:
       contents: read
       packages: read
