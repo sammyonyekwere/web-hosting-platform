@@ -22,4 +22,4 @@ crash.log
 .env.*
 
 # ignore bootstrap
-bootstrap/
+# bootstrap/
