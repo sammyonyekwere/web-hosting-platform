@@ -3,9 +3,12 @@ variable "location" {
   default = "UK South"
 }
 
-variable "sitename" {
-  type    = string
-  default = "webapp"
+variable "app_name" {
+  type = string
+}
+
+variable "app_email" {
+  type = string
 }
 
 variable "resource_group_name" {
