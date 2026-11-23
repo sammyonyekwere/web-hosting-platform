@@ -100,6 +100,7 @@ resource "azurerm_role_assignment" "github" {
 
 }
 
+
 output "random_integer" {
   value = random_integer.tfstate.result
 }

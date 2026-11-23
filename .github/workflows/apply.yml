@@ -54,14 +54,10 @@ jobs:
 
       - name: Terraform Plan
         shell: bash
-        env:
-          ARM_USE_AZUREAD: "true"
         run: |
           terraform plan -out=tfplan
 
       - name: Terraform Apply
         shell: bash
-        env:
-          ARM_USE_AZUREAD: "true"
         run: |
           terraform apply -auto-approve tfplan

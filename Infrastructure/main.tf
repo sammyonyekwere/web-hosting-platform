@@ -8,6 +8,13 @@ resource "azurerm_resource_group" "web" {
   location = var.location
 }
 
+
+resource "azurerm_role_assignment" "github_infrastructure" {
+  scope                = azurerm_resource_group.web.id
+  role_definition_name = "Contributor"
+  principal_id         = azuread_service_principal.github.object_id
+}
+
 module "network" {
   source              = "./modules/networking"
   sitename            = var.app_name
