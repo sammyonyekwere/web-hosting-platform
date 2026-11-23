@@ -13,6 +13,8 @@ resource "azurerm_role_assignment" "github_infrastructure" {
   scope                = azurerm_resource_group.web.id
   role_definition_name = "Contributor"
   principal_id         = var.github_service_principal_object_id
+
+  depends_on = [ azurerm_resource_group.web ]
 }
 
 module "network" {
