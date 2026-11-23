@@ -100,6 +100,18 @@ resource "azurerm_role_assignment" "github" {
 
 }
 
+resource "azurerm_resource_group" "web" {
+  name     = var.resource_group_name
+  location = var.location
+}
+
+
+resource "azurerm_role_assignment" "github_infrastructure" {
+  scope                = azurerm_resource_group.web.id
+  role_definition_name = "Contributor"
+  principal_id         = azuread_service_principal.github.object_id
+}
+
 
 output "random_integer" {
   value = random_integer.tfstate.result

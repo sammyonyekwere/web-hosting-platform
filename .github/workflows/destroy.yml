@@ -1,0 +1,59 @@
+name: Terraform Apply
+on: 
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+jobs:
+  terraform-destroy:
+    permissions:
+      contents: read
+      packages: read
+      id-token: write
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Infrastructure
+    env:
+      ARM_USE_AZUREAD: "true"
+      TF_BACKEND_RESOURCE_GROUP: ${{ vars.TF_BACKEND_RESOURCE_GROUP }}
+      TF_BACKEND_STORAGE_ACCOUNT: ${{ vars.TFSTATE_STORAGE_ACCOUNT_NAME }}
+      TF_VAR_github_service_principal_object_id: ${{ vars.AZURE_OBJECT_ID }}
+      TF_BACKEND_CONTAINER: ${{ vars.TFSTATE_CONTAINER_NAME }}
+      TF_BACKEND_KEY: ${{ vars.TFSTATE_KEY }}
+      TF_VAR_app_name: ${{ vars.APP_NAME }}
+      TF_VAR_app_email: ${{ vars.APP_EMAIL }}
+      TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}
+      TF_VAR_environment: ${{ vars.ENVIRONMENT }}
+      TF_VAR_location: ${{ vars.LOCATION }}
+      TF_VAR_administrator_login: ${{ vars.ADMINISTRATOR_LOGIN }}
+      TF_VAR_administrator_password: ${{ vars.ADMINISTRATOR_PASSWORD }}
+      
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16"
+
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Terraform Init
+        shell: bash
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=$TF_BACKEND_RESOURCE_GROUP" \
+            -backend-config="storage_account_name=$TF_BACKEND_STORAGE_ACCOUNT" \
+            -backend-config="container_name=$TF_BACKEND_CONTAINER" \
+            -backend-config="key=$TF_BACKEND_KEY" 
+
+      - name: Terraform Apply
+        shell: bash
+        run: |
+          terraform destroy -auto-approve 
