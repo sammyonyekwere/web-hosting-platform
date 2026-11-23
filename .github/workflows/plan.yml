@@ -21,6 +21,7 @@ jobs:
       TF_BACKEND_STORAGE_ACCOUNT: ${{ vars.TFSTATE_STORAGE_ACCOUNT_NAME }}
       TF_BACKEND_CONTAINER: ${{ vars.TFSTATE_CONTAINER_NAME }}
       TF_BACKEND_KEY: ${{ vars.TFSTATE_KEY }}
+      TF_VAR_github_service_principal_object_id: ${{ vars.AZURE_OBJECT_ID }}
       TF_VAR_app_name: ${{ vars.APP_NAME }}
       TF_VAR_app_email: ${{ vars.APP_EMAIL }}
       TF_VAR_resource_group_name: ${{ vars.RESOURCE_GROUP_NAME }}

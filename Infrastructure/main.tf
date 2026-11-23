@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "web" {
 resource "azurerm_role_assignment" "github_infrastructure" {
   scope                = azurerm_resource_group.web.id
   role_definition_name = "Contributor"
-  principal_id         = azuread_service_principal.github.object_id
+  principal_id         = var.github_service_principal_object_id
 }
 
 module "network" {

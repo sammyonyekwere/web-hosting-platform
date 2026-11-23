@@ -29,3 +29,7 @@ variable "administrator_password" {
   type      = string
   sensitive = true
 }
+
+variable "github_service_principal_object_id" {
+  type      = string
+}
