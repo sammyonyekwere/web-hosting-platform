@@ -31,5 +31,5 @@ variable "administrator_password" {
 }
 
 variable "github_service_principal_object_id" {
-  type      = string
+  type = string
 }

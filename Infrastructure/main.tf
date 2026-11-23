@@ -3,32 +3,22 @@ resource "random_integer" "rand" {
   max = 99999
 }
 
-resource "azurerm_resource_group" "web" {
-  name     = var.resource_group_name
-  location = var.location
-}
-
-
-resource "azurerm_role_assignment" "github_infrastructure" {
-  scope                = azurerm_resource_group.web.id
-  role_definition_name = "Contributor"
-  principal_id         = var.github_service_principal_object_id
-
-  depends_on = [ azurerm_resource_group.web ]
+data "azurerm_resource_group" "web" {
+  name = var.resource_group_name
 }
 
 module "network" {
   source              = "./modules/networking"
   sitename            = var.app_name
-  resource_group_name = azurerm_resource_group.web.name
+  resource_group_name = data.azurerm_resource_group.web.name
   environment         = var.environment
   location            = var.location
 }
 
 module "database" {
   source                 = "./modules/database"
-  resource_group_name    = azurerm_resource_group.web.name
-  location               = azurerm_resource_group.web.location
+  resource_group_name    = data.azurerm_resource_group.web.name
+  location               = data.azurerm_resource_group.web.location
   private_dns_zone_id    = module.network.db_private_dns_zone_id
   subnet_id              = module.network.db-subnet-id
   administrator_login    = var.administrator_login
@@ -39,8 +29,8 @@ module "database" {
 
 module "storage" {
   source              = "./modules/storage"
-  resource_group_name = azurerm_resource_group.web.name
-  location            = azurerm_resource_group.web.location
+  resource_group_name = data.azurerm_resource_group.web.name
+  location            = data.azurerm_resource_group.web.location
 
 
 }
@@ -49,8 +39,8 @@ module "hosting" {
   source               = "./modules/hosting"
   app_name             = "${var.app_name}${random_integer.rand.result}"
   app_email            = var.app_email
-  resource_group_name  = azurerm_resource_group.web.name
-  location             = azurerm_resource_group.web.location
+  resource_group_name  = data.azurerm_resource_group.web.name
+  location             = data.azurerm_resource_group.web.location
   database_name        = module.database.database_name
   database_hostname    = module.database.fqdn
   storage_access_key   = module.storage.storage_access_key
