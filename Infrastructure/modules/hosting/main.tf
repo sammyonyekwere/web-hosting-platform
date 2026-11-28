@@ -13,11 +13,12 @@ resource "azurerm_service_plan" "app" {
 }
 
 resource "azurerm_linux_web_app" "app" {
-  name                = var.app_name
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  service_plan_id     = azurerm_service_plan.app.id
-  https_only          = true
+  name                      = var.app_name
+  resource_group_name       = var.resource_group_name
+  location                  = var.location
+  service_plan_id           = azurerm_service_plan.app.id
+  https_only                = true
+  virtual_network_subnet_id = var.subnet_id
 
   app_settings = {
     DATABASE_NAME     = var.database_name

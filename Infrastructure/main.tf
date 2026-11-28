@@ -46,5 +46,5 @@ module "hosting" {
   storage_access_key   = module.storage.storage_access_key
   storage_account_name = module.storage.storage_account_name
   storage_share_name   = module.storage.storage_file_share_name
-
+  subnet_id            = module.network.app-subnet-id
 }

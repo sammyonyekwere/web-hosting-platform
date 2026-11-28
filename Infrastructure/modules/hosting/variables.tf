@@ -33,3 +33,7 @@ variable "storage_account_name" {
 variable "storage_share_name" {
   type = string
 }
+
+variable "subnet_id" {
+  type = string
+}
